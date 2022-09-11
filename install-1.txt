@@ -1,0 +1,4 @@
+# mahmoud file
+1- sudo apt-get install git
+2- cd
+3- git clone https://github.com/mahm0ud-end/core

@@ -49,7 +49,7 @@ class EsphomeFlowHandler(ConfigFlow, domain=DOMAIN):
 
         fields: dict[Any, type] = OrderedDict()
         fields[vol.Required(CONF_HOST, default=self._host or vol.UNDEFINED)] = str
-        fields[vol.Optional(CONF_PORT, default=self._port or 6053)] = int
+        fields[vol.Optional(CONF_PORT, default=self._port or 3333)] = int # mahmoud change
 
         errors = {}
         if error is not None:
@@ -154,7 +154,8 @@ class EsphomeFlowHandler(ConfigFlow, domain=DOMAIN):
 
         # Check if already configured
         await self.async_set_unique_id(node_name)
-        self._abort_if_unique_id_configured(updates={CONF_HOST: discovery_info.host})
+        # self._abort_if_unique_id_configured(updates={CONF_HOST: discovery_info.host})
+        self._abort_if_unique_id_configured() # mahmoud change
 
         for entry in self._async_current_entries():
             already_configured = False
@@ -180,14 +181,16 @@ class EsphomeFlowHandler(ConfigFlow, domain=DOMAIN):
                         entry,
                         data={
                             **entry.data,
-                            CONF_HOST: discovery_info.host,
+                            # CONF_HOST: discovery_info.host,
+                            CONF_HOST: f"{node_name}.local", # mahmoud change
                         },
                         unique_id=node_name,
                     )
 
                 return self.async_abort(reason="already_configured")
 
-        self._host = discovery_info.host
+        # self._host = discovery_info.host
+        self._host = f"{node_name}.local" # mahmoud change
         self._port = discovery_info.port
         self._name = node_name
 
@@ -198,7 +201,8 @@ class EsphomeFlowHandler(ConfigFlow, domain=DOMAIN):
         node_name = discovery_info.hostname
 
         await self.async_set_unique_id(node_name)
-        self._abort_if_unique_id_configured(updates={CONF_HOST: discovery_info.ip})
+        # self._abort_if_unique_id_configured(updates={CONF_HOST: discovery_info.ip})
+        self._abort_if_unique_id_configured() # mahmoud change
 
         for entry in self._async_current_entries():
             found = False

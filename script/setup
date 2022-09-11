@@ -28,11 +28,44 @@ python3 -m pip install -e . --constraint homeassistant/package_constraints.txt -
 
 hass --script ensure_config -c config
 
+# mahmoud change
+
+pip install sqlalchemy
+pip install fnvhash
+
+curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64.deb
+sudo dpkg -i cloudflared.deb
+# sudo cloudflared service install eyJhIjoiN2M2YWE0MmNkOGE3NThkZWE3ODY0MDliZWNlOTFkYWQiLCJ0IjoiODRhZDliYzQtNTJlZS00YWE1LWExNTItNzZhYWIzZWQzMzkyIiwicyI6IlpXVTVNV1F5WlRndE5UZ3pZUzAwTUdOa0xUaGxNRFl0TnpFMFpUaGlOR1F5T0RFeCJ9
+# get the correct cloudflare tunnel installation line from cloudflare Zero Trust
+
+
 if ! grep -R "logger" config/configuration.yaml >> /dev/null;then
 echo "
 logger:
-  default: info
+  default: error
   logs:
     homeassistant.components.cloud: debug
+
+http: # in case of  this case you can only reach homeassistant using https://ip:8123 or https://stips.local
+  #ssl_certificate: ~/core/config/ssl/origin.pem # uncomment for port forwarding dns method. After creating the certificate file
+  #ssl_key: ~/core/config/ssl/cfprivkey.pem # uncomment for port forwarding dns method. After creating the private key file
+  use_x_forwarded_for: true
+  trusted_proxies: # trusted proxies of cloudflare. If different proxy is used, refere to the corresponding ips
+    - 173.245.48.0/20
+    - 103.21.244.0/22
+    - 103.22.200.0/22
+    - 103.31.4.0/22
+    - 141.101.64.0/18
+    - 108.162.192.0/18
+    - 190.93.240.0/20
+    - 188.114.96.0/20
+    - 197.234.240.0/22
+    - 198.41.128.0/17
+    - 162.158.0.0/15
+    - 104.16.0.0/13
+    - 104.24.0.0/14
+    - 172.64.0.0/13
+    - 131.0.72.0/22
+    - 127.0.0.1
 " >> config/configuration.yaml
 fi
