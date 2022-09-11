@@ -1,6 +1,6 @@
 {
   "domain": "esphome",
-  "name": "S-Tips", // mahmoud change
+  "name": "S-Tips",
   "config_flow": true,
   "documentation": "https://www.home-assistant.io/integrations/esphome",
   "requirements": ["aioesphomeapi==10.13.0"],
